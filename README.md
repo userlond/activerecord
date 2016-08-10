@@ -135,7 +135,7 @@ function to set where conditions
 
     composer require bephp/activerecord 
 
-There's one [Blog demo](https://github.com/bephp/blog), work with [Router](https://github.com/bephp/router) and [MicoTpl](https://github.com/bephp/microtpl).
+There's one [Blog demo](https://github.com/bephp/blog), work with [Router](https://github.com/bephp/router) and [MicroTpl](https://github.com/bephp/microtpl).
 
 ## Demo
 ### Include base class ActiveRecord
@@ -148,14 +148,17 @@ class User extends ActiveRecord{
 	public $table = 'user';
 	public $primaryKey = 'id';
 	public $relations = array(
+	        // format is array($relation_type, $child_namespaced_classname, $foreign_key_of_child)
 		'contacts' => array(self::HAS_MANY, 'Contact', 'user_id'),
-		'contact' => array(self::HAS_ONE, 'Contact', 'user_id'),
+		// format may be array($relation_type, $child_namespaced_classname, $foreign_key_of_child, $array_of_sql_part_functions)
+		'contact' => array(self::HAS_ONE, 'Contact', 'user_id', array('where' => '1', 'order' => 'id desc')),
 	);
 }
 class Contact extends ActiveRecord{
 	public $table = 'contact';
 	public $primaryKey = 'id';
 	public $relations = array(
+	        // format is array($relation_type, $parent_namespaced_classname, $foreign_key_in_current_table)
 		'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 	);
 }
